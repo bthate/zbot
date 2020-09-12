@@ -1,0 +1,35 @@
+#!/usr/bin/python3 -u
+# ZBOT - 24/7 channel daemon.
+#
+#
+
+import os
+import sys
+
+sys.path.insert(0, os.getcwd())
+
+import obj
+
+from obj import cdir, os, sys
+from csl import Console, boot, execute
+from hdl import Kernel
+
+def main():
+    wd = os.path.expanduser("~/.zbot")
+    obj.workdir = wd
+    cdir(wd)
+    sys.path.insert(0, os.path.join(wd))
+    k = boot("zbot", wd)
+    if "m" in k.cfg.opts:
+        k.scandir(os.path.join(wd, "mods"))
+        k.walk('mods')
+    if k.cfg.txt:
+        return k.cmd(k.cfg.origtxt)
+    k.start()
+    c = Console()
+    c.start()
+    k.cfg.opts["w"]= True
+    k.wait()
+
+execute(main)
+os._exit(0)
