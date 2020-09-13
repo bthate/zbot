@@ -2,6 +2,8 @@
 #
 #
 
+__version__ = 58
+
 import importlib
 import importlib.util
 import inspect
@@ -19,7 +21,7 @@ import zbot.obj
 from zbot.obj import Cfg, Default, Object, Ol, cdir, get, get_name, last, locked, save, update
 
 def __dir__():
-    return ("Cfg", "Event", "Handler", "Kernel", "Repeater", "Task", "Timer", "direct", "get_exception", "get_kernel", "launch", "starttime")
+    return ("Cfg", "Event", "Kernel", "direct", "get_exception", "get_kernel", "launch", "starttime")
 
 dispatchlock = _thread.allocate_lock()
 starttime = time.time()

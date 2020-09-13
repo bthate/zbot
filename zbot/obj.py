@@ -1,10 +1,18 @@
-# OQ - write your own commands.
+# ZBOT - 24/7 channel daemon
 #
-# object library (obj)
+#
 
-"provides json file backend object load/save persitence. uses read only versioned objects."
-
-import datetime, importlib, inspect, json, os, random, sys, time, types, uuid, _thread
+import datetime
+import importlib
+import inspect
+import json
+import os
+import random
+import sys
+import time
+import types
+import uuid
+import _thread
 
 def __dir__():
     return ("ENOCLASS", "ENOFILENAME", "Object", "Ol", "Cfg", "Db", "Default", "edit",
@@ -15,14 +23,14 @@ savelock = _thread.allocate_lock()
 workdir = ""
 
 class ENOCLASS(Exception):
-    "no class found"
+
+    pass
 
 class ENOFILENAME(Exception):
-    "argument is no filename"
+
+    pass
 
 class Object:
-
-    "pure clean namespace object (no methods)."
 
     __slots__ = ("__dict__", "__stamp__")
 
@@ -54,10 +62,7 @@ class Object:
 
 class Ol(Object):
 
-    "list of objects."
-
     def append(self, key, value):
-        "add an value to the list at key."
         if key not in self:
             self[key] = []
         if isinstance(value, type(list)):
@@ -67,13 +72,10 @@ class Ol(Object):
                 self[key].append(value)
 
     def update(self, d):
-        "d is a dictinary to update the corresponding lists with."
         for k, v in d.items():
             self.append(k, v)
 
 class Default(Object):
-
-    "provide default string value."
 
     def __getattr__(self, k):
         if k not in self:
@@ -82,10 +84,9 @@ class Default(Object):
 
 class Cfg(Default):
 
-    "default config."
+    pass
 
 def all(otype, selector=None, index=None, timed=None):
-    "otype is the module.class, selector is key/value, index is into that result, timed is with 'from' and 'to' items."
     nr = -1
     if selector is None:
         selector = {}
@@ -102,7 +103,6 @@ def all(otype, selector=None, index=None, timed=None):
 
 
 def cdir(path):
-    "create a directory or nop if it already exists."
     if os.path.exists(path):
         return
     res = ""
@@ -117,7 +117,6 @@ def cdir(path):
             pass
 
 def default(o):
-    "return jsonable string of object"
     if isinstance(o, Object):
         return vars(o)
     if isinstance(o, dict):
@@ -129,7 +128,6 @@ def default(o):
     return repr(o)
 
 def deleted(otype):
-    "otype is the object type to show the deleted versions of."
     for fn in objs(otype):
         o = hook(fn)
         if "_deleted" not in o or not o._deleted:
@@ -137,7 +135,6 @@ def deleted(otype):
         yield o
 
 def edit(o, setter, skip=False):
-    "setters is a dictionary with key,values to edit."
     try:
         setter = vars(setter)
     except (TypeError, ValueError):
@@ -158,7 +155,6 @@ def edit(o, setter, skip=False):
     return count
 
 def fntime(daystr):
-    "return timestamp derived from the filename."
     daystr = daystr.replace("_", ":")
     datestr = " ".join(daystr.split(os.sep)[-2:])
     try:
@@ -174,7 +170,6 @@ def fntime(daystr):
     return t
 
 def find(otype, selector=None, index=None, timed=None):
-    "otype is the module.class, selector is key/value, index is into that result, timed is with 'from' and 'to' items."
     nr = -1
     if selector is None:
         selector = {}
@@ -190,7 +185,6 @@ def find(otype, selector=None, index=None, timed=None):
         yield o
 
 def find_event(e):
-    "find objects based on event data."
     nr = -1
     for fn in objs(e.otype, e.timed):
         o = hook(fn)
@@ -204,7 +198,6 @@ def find_event(e):
         yield o
 
 def format(o, keylist=None, pure=False, skip=None):
-    "keys is list of keys to display, pure is with or without parameter names, skip skips value."
     if not keylist:
         keylist = vars(o).keys()
     res = []
@@ -231,7 +224,6 @@ def format(o, keylist=None, pure=False, skip=None):
     return txt.strip()
 
 def get(o, k, d=None):
-    "k is ket to get, d is default."
     try:
         res = o.get(k, d)
     except (TypeError, AttributeError):
@@ -239,7 +231,6 @@ def get(o, k, d=None):
     return res
 
 def get_cls(name):
-    "name is the module.class name (qualified name) of the to be constructed object."
     try:
         modname, clsname = name.rsplit(".", 1)
     except:
@@ -251,7 +242,6 @@ def get_cls(name):
     return getattr(mod, clsname)
 
 def get_name(o):
-    "o is object to get name from."
     t = type(o)
     if t == types.ModuleType:
         return o.__name__
@@ -268,7 +258,6 @@ def get_name(o):
     return n
 
 def get_type(o):
-    "return the qualified modulename.Classname name of an object."
     t = type(o)
     if t == type:
         try:
@@ -278,7 +267,6 @@ def get_type(o):
     return str(type(o)).split()[-1][1:-2]
 
 def hook(fn):
-    "reconstruct the object with proper class derived from the filename."
     if fn.count(os.sep) > 3:
         oname = fn.split(os.sep)[-4:]
     else:
@@ -291,7 +279,6 @@ def hook(fn):
     return o
 
 def hooked(d):
-    "d is a dictionary that uses the stamp value to reconstruct the corresponding class."
     if "stamp" in dir(d):
         t = d["stamp"].split(os.sep)[0]
         if not t:
@@ -303,34 +290,29 @@ def hooked(d):
     return d
 
 def items(o):
-    "o is object to get items from."
     try:
         return o.items()
     except (TypeError, AttributeError):
         return o.__dict__.items()
 
 def keys(o):
-    "o is object to return list of keys from."
     try:
         return o.keys()
     except (TypeError, AttributeError):
         return o.__dict__.keys()
 
 def last(o):
-    "o is the object to show the last version on disk of."
     path, l = lastfn(str(get_type(o)))
     if  l:
         update(o, l)
         o.__stamp__ = path
 
 def lasttype(otype):
-    "otype is the object (module.class) to the last saved object of."
     fns = objs(otype)
     if fns:
         return hook(fns[-1])
 
 def lastfn(otype):
-    "otype is the type to return the last object and it's filename for."
     fns = objs(otype)
     if fns:
         fn = fns[-1]
@@ -338,7 +320,6 @@ def lastfn(otype):
     return (None, None)
 
 def load(o, path):
-    "o is object to load the data into, path is the filename to read from."
     assert path
     assert workdir
     o.__stamp__ = path
@@ -358,7 +339,6 @@ def load(o, path):
     unstamp(o)
 
 def locked(l):
-    "l is the lock the provide a descriptor for."
     def lockeddec(func, *args, **kwargs):
         def lockedfunc(*args, **kwargs):
             l.acquire()
@@ -373,7 +353,6 @@ def locked(l):
     return lockeddec
 
 def names(name, timed=None):
-    "return all filenames that have name in their filename."
     if not name:
         return []
     assert workdir
@@ -391,7 +370,6 @@ def names(name, timed=None):
     return sorted(res, key=fntime)
 
 def objs(name, timed=None):
-    "return last versions of object with name in their filename."
     if not name:
         return []
     assert workdir
@@ -414,12 +392,10 @@ def objs(name, timed=None):
     return sorted(res, key=fntime)
 
 def register(o, k, v):
-    "o is the object to register key (k) an value (v)."
     o[k] = v
 
 @locked(savelock)
 def save(o, stime=None):
-    "o is the object to save, stime is option provided timestamp."
     assert workdir
     if stime:
         o.__stamp__ = os.path.join(get_type(o), str(uuid.uuid4()),
@@ -444,14 +420,12 @@ def save(o, stime=None):
     return o.__stamp__
 
 def scan(o, txt):
-    "txt is text to scan for in every object's value."
     for _k, v in items(o):
         if txt in str(v):
             return True
     return False
 
 def search(o, s):
-    "o is is the object to search for string s in, s is string to match in values."
     ok = False
     for k, v in items(s):
         vv = get(o, k)
@@ -462,7 +436,6 @@ def search(o, s):
     return ok
 
 def stamp(o):
-    "o is the object to provide with filename stamps."
     for k in xdir(o):
         oo = getattr(o, k, None)
         if isinstance(oo, Object):
@@ -475,7 +448,6 @@ def stamp(o):
     return o
 
 def unstamp(o):
-    "remove filename stamps."
     for k in xdir(o):
         oo = getattr(o, k, None)
         if isinstance(oo, Object):
@@ -489,20 +461,17 @@ def unstamp(o):
     return o
 
 def update(o, d):
-    "o is the object to update with dict or other Object."
     if isinstance(d, Object):
         return o.__dict__.update(vars(d))
     return o.__dict__.update(d)
 
 def values(o):
-    " o is the object to return values from."
     try:
         return o.values()
     except (TypeError, AttributeError):
         return o.__dict__.values()
 
 def xdir(o, skip=None):
-    "o is the object get a dir() from, skip is the string as skip value"
     res = []
     for k in dir(o):
         if skip is not None and skip in k:

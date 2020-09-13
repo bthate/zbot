@@ -1,8 +1,6 @@
-# ZBOT - 24/7 channel daemon.
+# ZBOT - 24/7 channel daemon
 #
 #
-
-__version__ = 58
 
 import os
 import queue
@@ -14,7 +12,7 @@ import _thread
 
 from zbot.csl import parse
 from zbot.obj import Cfg, Default, Object, format, last, update, save
-from zbot.hdl import Event, Handler, bus, get_kernel, launch
+from zbot.hdl import Event, Handler, bus, get_kernel, launch, __version__
 
 def __dir__():
     return ("Cfg", "DCC", "Event", "IRC", "cfg", "init")
@@ -521,7 +519,6 @@ class Users(Object):
 users = Users()
 
 def cfg(event):
-    " edit irc config."
     c = Cfg()
     last(c)
     o = Default()

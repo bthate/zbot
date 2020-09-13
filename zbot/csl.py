@@ -1,8 +1,17 @@
 # ZBOT - 24/7 channel daemon
 #
 #
-import atexit, datetime, os, pwd, readline, sys, termios, time, threading
-import zbot
+
+import atexit
+import datetime
+import os
+import pwd
+import readline
+import sys
+import termios
+import time
+import threading
+import zbot.obj
 
 from zbot.obj import Default, Object, cdir, fntime, last, save, update
 from zbot.hdl import Cfg, Event, Kernel, get_kernel, launch, starttime
