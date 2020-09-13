@@ -1,1 +1,1 @@
-rm -fR bin/*~ zbot/*~ zbot/__pycache__ mods/*~ mods/__pycache__
+rm -fR *~ __pycache__ zbot.egg-info build dist bin/*~ zbot/*~ zbot/__pycache__ mods/*~ mods/__pycache__

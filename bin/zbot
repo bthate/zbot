@@ -13,6 +13,7 @@ def main():
     if k.cfg.txt:
         return k.cmd(k.cfg.origtxt)
     k.start()
+    k.init("irc")
     c = Console()
     c.start()
     k.wait()
