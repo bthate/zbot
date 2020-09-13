@@ -1,0 +1,1 @@
+rm -fR bin/*~ zbot/*~ zbot/__pycache__ mods/*~ mods/__pycache__
