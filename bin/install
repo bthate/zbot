@@ -1,0 +1,19 @@
+mkdir /home/zbot
+mkdir /home/zbot/.zbot
+mkdir /home/zbot/.zbot/mods
+groupadd zbot
+chown -R zbot:zbot /home/zbot
+useradd zbot -d /home/zbot
+passwd zbot
+sudo -u zbot zcmd cfg server=192.168.2.2 channel=#madbot nick=madbot
+mods/*.py /home/zbot/.zbot/mods
+chown -R zbot:zbot /home/zbot
+chown -R zbot:zbot /home/zbot/.zbot
+chmod -R 700 /home/zbot/.zbot/mods/
+chmod -R 400 /home/zbot/.zbot/mods/*.py
+cp zbot.service /etc/systemd/system/zbot.service
+systemctl enable zbot
+systemctl daemon-reload
+service zbot stop
+service zbot start
+systemctl status zbot
