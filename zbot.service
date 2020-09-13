@@ -1,0 +1,12 @@
+[Unit]
+Description=ZBOT - 24/7 channel daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=zbot
+Group=zbot
+ExecStart=/usr/local/bin/zbotd 
+
+[Install]
+WantedBy=multi-user.target

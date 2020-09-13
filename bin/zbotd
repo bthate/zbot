@@ -3,17 +3,14 @@
 #
 #
 
-from zbot.obj import cdir, os
-from zbot.csl import Console, boot, execute
-from zbot.hdl import Kernel
+from zbot.obj import os
+from zbot.csl import boot, execute
 
 def main():
     k = boot("zbot")
     k.walk("zbot,mods")
     k.start()
     k.init("irc")
-    c = Console()
-    c.start()
     k.wait()
 
 execute(main)

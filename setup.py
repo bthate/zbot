@@ -20,7 +20,7 @@ setup(
     zip_safe=False,
     packages=["zbot"],
     namespace_packages=["zbot"],
-    scripts=["bin/zbot", "bin/zcmd"],
+    scripts=["bin/zbot", "bin/zbotd", "bin/zcmd"],
     classifiers=['Development Status :: 3 - Alpha',
                  'License :: Public Domain',
                  'Operating System :: Unix',
