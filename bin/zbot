@@ -8,11 +8,11 @@ import sys
 
 sys.path.insert(0, os.getcwd())
 
-import obj
+import zbot.obj
 
-from obj import cdir, os, sys
-from csl import Console, boot, execute
-from hdl import Kernel
+from zbot.obj import cdir, os, sys
+from zbot.csl import Console, boot, execute
+from zbot.hdl import Kernel
 
 def main():
     wd = os.path.expanduser("~/.zbot")

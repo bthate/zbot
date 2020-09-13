@@ -14,9 +14,9 @@ import time
 import threading
 import _thread
 
-from kern.csl import parse
-from kern.obj import Cfg, Default, Object, format, last, update, save
-from kern.hdl import Event, Handler, bus, get_kernel, launch
+from zbot.csl import parse
+from zbot.obj import Cfg, Default, Object, format, last, update, save
+from zbot.hdl import Event, Handler, bus, get_kernel, launch
 
 def __dir__():
     return ("Cfg", "DCC", "Event", "IRC", "cfg", "init")

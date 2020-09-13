@@ -1,15 +1,13 @@
-# MADBOT - 24/7 channel daemon.
+# ZBOT - 24/7 channel daemon.
 #
 #
-
-"basic commands."
 
 import time
 import threading
 
-from kern.obj import Object, get, get_type, update
-from kern.csl import elapsed, starttime
-from kern.hdl import get_kernel, find_modules
+from zbot.obj import Object, get, get_type, update
+from zbot.csl import elapsed, starttime
+from zbot.hdl import get_kernel, find_modules
 
 def __dir__():
     return ("cmd", "krn", "mds", "tsk", "ver", "wd")
@@ -17,15 +15,12 @@ def __dir__():
 k = get_kernel()
 
 def cmd(event):
-    "show list of commands."
     event.reply(",".join(sorted(k.cmds)))
 
 def mds(event):
-    "show loadable modules."
     event.reply(",".join([m.__name__.split(".")[-1] for m in find_modules("madbot")]))
 
 def tsk(event):
-    "show running tasks."
     psformat = "%-8s %-50s"
     result = []
     for thr in sorted(threading.enumerate(), key=lambda x: x.getName()):
@@ -47,10 +42,8 @@ def tsk(event):
             event.reply(res.rstrip())
 
 def ver(event):
-    "show module versions."
-    for mod in k.walk("madbot"):
+    for mod in k.walk("zbot"):
         try:
             event.reply("%s %s" % (mod.__name__, mod.__version__))
         except AttributeError:
             continue
-

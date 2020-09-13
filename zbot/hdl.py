@@ -1,9 +1,9 @@
 "event handler."
 
 import importlib, importlib.util, inspect, os, pkgutil, queue, sys, time, threading, traceback, zipfile, _thread
-import obj
+import zbot
 
-from obj import Cfg, Default, Object, Ol, cdir, get, get_name, last, locked, save, update
+from zbot.obj import Cfg, Default, Object, Ol, cdir, get, get_name, last, locked, save, update
 
 def __dir__():
     return ("Cfg", "Event", "Handler", "Kernel", "Repeater", "Task", "Timer", "direct", "get_exception", "get_kernel", "launch", "starttime")
@@ -105,9 +105,10 @@ class Handler(Object):
 
     def cmd(self, txt):
         "execute text on the handler."
-        from csl import parse
+        from zbot.csl import parse
         e = Event()
         e.txt = self.cfg.origtxt
+        parse(e, e.txt)
         self.dispatch(e)
         return e
 
@@ -138,6 +139,7 @@ class Handler(Object):
 
     def load_mod(self, name):
         "load a module onto the handler."
+        print("load %s" % name)
         mod = direct(name)
         self.scan(mod)
         return mod
@@ -156,10 +158,12 @@ class Handler(Object):
         self.stopped = True
         self.queue.put(None)
 
-    def walk(self, names):
+    def walk(self, names, ignore=""):
         "walk a packages modules."
         modules = []
         for name in names.split(","):
+            if name in ignore.split(","):
+                continue
             spec = importlib.util.find_spec(name)
             if not spec:
                 continue
@@ -167,6 +171,7 @@ class Handler(Object):
             pn = getattr(pkg, "__path__", None)
             if not pn:
                 continue
+            print("walk %s" % pn)
             for mi in pkgutil.iter_modules(pn):
                 mn = "%s.%s" % (name, mi.name)
                 module = self.load_mod(mn)
@@ -242,7 +247,7 @@ class Kernel(Handler):
 
     def start(self):
         "start the kernel."
-        assert obj.workdir
+        assert zbot.obj.workdir
         self.init(self.cfg.mods)
         super().start()
 

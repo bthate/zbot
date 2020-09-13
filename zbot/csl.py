@@ -3,10 +3,10 @@
 __version__ = 22
 
 import atexit, datetime, os, pwd, readline, sys, termios, time, threading
-import obj
+import zbot
 
-from obj import Default, Object, cdir, fntime, last, save, update
-from hdl import Cfg, Event, Kernel, get_kernel, launch, starttime
+from zbot.obj import Default, Object, cdir, fntime, last, save, update
+from zbot.hdl import Cfg, Event, Kernel, get_kernel, launch, starttime
 
 def __dir__():
     return ("Console", "execute", "elapsed", "parse", "parse_time", "parse_cli")
@@ -204,7 +204,7 @@ def boot(name, wd=""):
     k = get_kernel()
     parsed = Default()
     parse(k.cfg, " ".join(sys.argv[1:]))
-    obj.workdir = wd or os.path.expanduser("~/%s" % name)
+    zbot.obj.workdir = wd or os.path.expanduser("~/%s" % name)
     return k
 
 def root():

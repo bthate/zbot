@@ -8,19 +8,14 @@ import sys
 
 sys.path.insert(0, os.getcwd())
 
-from kern.obj import cdir, os, sys
-from kern.csl import Console, boot, execute
+from zbot.obj import cdir, os, sys
+from zbot.csl import Console, boot, execute
 
-import kern
+import zbot
 
 def main():
-    wd = os.path.expanduser("~/.zbot")
-    kern.obj.workdir = wd
-    cdir(wd)
-    sys.path.insert(0, os.path.join(wd))
-    k = boot("zcmd", wd)
-    k.scandir(os.path.join(wd, "mods"))
-    k.walk("mods")
+    k = boot("zcmd")
+    #k.walk("zbot", "irc")
     return k.cmd(k.cfg.origtxt)
 
 execute(main)
