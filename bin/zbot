@@ -16,10 +16,11 @@ from zbot.hdl import Kernel
 
 def main():
     wd = os.path.expanduser("~/.zbot")
-    obj.workdir = wd
+    zbot.obj.workdir = wd
     cdir(wd)
     sys.path.insert(0, os.path.join(wd))
     k = boot("zbot", wd)
+    k.walk("zbot")
     if "m" in k.cfg.opts:
         k.scandir(os.path.join(wd, "mods"))
         k.walk('mods')
@@ -28,7 +29,6 @@ def main():
     k.start()
     c = Console()
     c.start()
-    k.cfg.opts["w"]= True
     k.wait()
 
 execute(main)

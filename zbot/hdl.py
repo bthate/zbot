@@ -139,7 +139,6 @@ class Handler(Object):
 
     def load_mod(self, name):
         "load a module onto the handler."
-        print("load %s" % name)
         mod = direct(name)
         self.scan(mod)
         return mod
@@ -171,7 +170,6 @@ class Handler(Object):
             pn = getattr(pkg, "__path__", None)
             if not pn:
                 continue
-            print("walk %s" % pn)
             for mi in pkgutil.iter_modules(pn):
                 mn = "%s.%s" % (name, mi.name)
                 module = self.load_mod(mn)

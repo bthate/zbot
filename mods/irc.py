@@ -1,10 +1,8 @@
-# MADBOT - 24/7 channel daemon.
+# ZBOT - 24/7 channel daemon.
 #
 #
 
-"internet relay chat (irc)"
-
-__version__ = 13
+__version__ = 58
 
 import os
 import queue
@@ -51,12 +49,12 @@ class Cfg(Cfg):
 
     def __init__(self):
         super().__init__()
-        self.channel = "#madbot"
-        self.nick = "madbot"
+        self.channel = "#dunkbots"
+        self.nick = "zbot"
         self.port = 6667
-        self.realname = "madbot"
+        self.realname = "zbot"
         self.server = "localhost"
-        self.username = "madbot"
+        self.username = "zbot"
 
 class Event(Event):
 
