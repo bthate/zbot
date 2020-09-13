@@ -15,7 +15,7 @@ import zbot
 
 def main():
     k = boot("zcmd")
-    #k.walk("zbot", "irc")
+    k.walk("zbot", "irc")
     return k.cmd(k.cfg.origtxt)
 
 execute(main)
