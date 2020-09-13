@@ -189,7 +189,7 @@ def boot(name, wd=""):
     k = get_kernel()
     parsed = Default()
     parse(k.cfg, " ".join(sys.argv[1:]))
-    zbot.obj.workdir = wd or os.path.expanduser("~/.%s" % name)
+    zbot.obj.workdir = k.cfg.wd = wd or os.path.expanduser("~/.%s" % name)
     cdir(zbot.obj.workdir)
     return k
 

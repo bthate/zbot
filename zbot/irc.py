@@ -12,7 +12,7 @@ import _thread
 
 from zbot.csl import parse
 from zbot.obj import Cfg, Default, Object, format, last, update, save
-from zbot.hdl import Event, Handler, bus, get_kernel, launch, __version__
+from zbot.hdl import Event, Handler, bus, get_kernel, launch
 
 def __dir__():
     return ("Cfg", "DCC", "Event", "IRC", "cfg", "init")
@@ -358,8 +358,9 @@ class IRC(Handler):
         print(event.error)
 
     def NOTICE(self, event):
+        from zbot.hdl import __version__
         if event.txt.startswith("VERSION"):
-            txt = "\001VERSION %s %s - %s\001" % ("MADBOT", __version__, "write your own commands.")
+            txt = "\001VERSION %s %s - %s\001" % ("ZBOT", __version__, "24/7 channel daemon")
             self.command("NOTICE", event.channel, txt)
 
     def PRIVMSG(self, event):
@@ -415,7 +416,7 @@ class DCC(Handler):
             s.connect((addr, port))
         except ConnectionError:
             return
-        s.send(bytes('Welcome to MADBOT %s !!\n' % event.nick, "utf-8"))
+        s.send(bytes('Welcome to ZBOT %s !!\n' % event.nick, "utf-8"))
         s.setblocking(1)
         os.set_inheritable(s.fileno(), os.O_RDWR)
         self._sock = s

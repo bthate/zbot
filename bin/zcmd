@@ -7,7 +7,7 @@ from zbot.obj import cdir, os
 from zbot.csl import boot, execute
 
 def main():
-    k = boot("zcmd")
+    k = boot("zcmd", os.path.expanduser("~/.zbot"))
     k.walk("zbot,mods", "irc")
     return k.cmd(k.cfg.origtxt)
 

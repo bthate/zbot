@@ -2,7 +2,7 @@
 #
 #
 
-__version__ = 58
+__version__ = 59
 
 import importlib
 import importlib.util

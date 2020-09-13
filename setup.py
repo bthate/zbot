@@ -10,7 +10,7 @@ def readme():
 
 setup(
     name='zbot',
-    version='58',
+    version='59',
     url='https://github.com/bthate/zbot',
     author='Bart Thate',
     author_email='bthate@dds.nl',
