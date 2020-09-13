@@ -1,3 +1,7 @@
+# ZBOT - 24/7 channel daemon
+#
+#
+
 from setuptools import setup
 
 def readme():
@@ -10,13 +14,13 @@ setup(
     url='https://github.com/bthate/zbot',
     author='Bart Thate',
     author_email='bthate@dds.nl',
-    description="24/7 channel daaemon.",
+    description="24/7 channel daaemon",
     long_description=readme(),
     license='Public Domain',
     zip_safe=True,
-    py_modules=["cmd", "csl", "hdl", "obj", "irc"], 
-    packages=["madbot"],
-    scripts=["bin/madbot"],
+    py_modules=["cmd", "csl", "hdl", "obj"], 
+    packages=["zbot"],
+    scripts=["bin/zbot", "bin/zcmd"],
     classifiers=['Development Status :: 3 - Alpha',
                  'License :: Public Domain',
                  'Operating System :: Unix',

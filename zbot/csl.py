@@ -1,7 +1,6 @@
-"console related functions."
-
-__version__ = 22
-
+# ZBOT - 24/7 channel daemon
+#
+#
 import atexit, datetime, os, pwd, readline, sys, termios, time, threading
 import zbot
 
@@ -38,17 +37,14 @@ resume = {}
 
 class Console(Object):
 
-    "console class running a prompt to give commands at."
-
     def __init__(self):
         super().__init__()
         self.ready = threading.Event()
 
     def announce(self, txt):
-        "announce text on the console. override this."
+        pass
 
     def input(self):
-        "poll for input and dispatch to kernel."
         k = get_kernel()
         while 1:
             try:
@@ -61,37 +57,29 @@ class Console(Object):
             event.wait()
 
     def poll(self):
-        "query for input."
         e = Event()
         e.orig = repr(self)
         e.txt = input("> ")
         return e
 
     def raw(self, txt):
-        "print raw txt on console."
         print(txt.rstrip())
 
     def say(self, channel, txt):
-        "placeholder for channel output."
         self.raw(txt)
 
     def start(self):
-        "start prompting for input."
         k = get_kernel()
         setcompleter(k.cmds)
         launch(self.input)
 
 class Token(Object):
 
-    "hold text."
-
     def __init__(self, txt):
         super().__init__()
         self.txt = txt
 
 class Option(Default):
-
-    "holds an option --option or -o."
 
     def __init__(self, txt):
         super().__init__()
@@ -101,8 +89,6 @@ class Option(Default):
             self.opt = txt[1:]
 
 class Getter(Object):
-
-    "holds a key/value to select with."
 
     def __init__(self, txt):
         super().__init__()
@@ -115,8 +101,6 @@ class Getter(Object):
 
 class Setter(Object):
 
-    "holds a key/value to set."
-
     def __init__(self, txt):
         super().__init__()
         try:
@@ -128,8 +112,6 @@ class Setter(Object):
 
 
 class Skip(Object):
-
-    "holds a key to ignore (ends with a '-')."
 
     def __init__(self, txt):
         super().__init__()
@@ -146,8 +128,6 @@ class Skip(Object):
             self[pre] = True
 
 class Timed(Object):
-
-    "holds a from/to timespan."
 
     def __init__(self, txt):
         super().__init__()
@@ -172,7 +152,6 @@ class Timed(Object):
 
 
 def complete(text, state):
-    "match completer."
     matches = []
     if text:
         matches = [s for s in cmds if s and s.startswith(text)]
@@ -184,7 +163,6 @@ def complete(text, state):
         return None
 
 def execute(main):
-    "execute a function and reset terminal on exit."
     termsave()
     try:
         main()
@@ -196,19 +174,17 @@ def execute(main):
         termreset()
 
 def get_completer():
-    "return completer."
     return readline.get_completer()
 
 def boot(name, wd=""):
-    "set working directory."
     k = get_kernel()
     parsed = Default()
     parse(k.cfg, " ".join(sys.argv[1:]))
-    zbot.obj.workdir = wd or os.path.expanduser("~/%s" % name)
+    zbot.obj.workdir = wd or os.path.expanduser("~/.%s" % name)
+    cdir(zbot.obj.workdir)
     return k
 
 def root():
-    "see if program is run as root."
     if os.geteuid() != 0:
         return False
     return True
@@ -223,23 +199,19 @@ def privileges(name):
     old_umask = os.umask(0o22)
 
 def setcompleter(commands):
-    "init completer with commands list."
     cmds.extend(commands)
     readline.set_completer(complete)
     readline.parse_and_bind("tab: complete")
     atexit.register(lambda: readline.set_completer(None))
 
 def termsetup(fd):
-    "return attributes of filedescriptor."
     return termios.tcgetattr(fd)
 
 def termreset():
-    "reset terminal."
     if "old" in resume:
         termios.tcsetattr(resume["fd"], termios.TCSADRAIN, resume["old"])
 
 def termsave():
-    "save terminal settings."
     try:
         resume["fd"] = sys.stdin.fileno()
         resume["old"] = termsetup(sys.stdin.fileno())
@@ -248,7 +220,6 @@ def termsave():
         pass
 
 def touch(fname):
-    "touch a file."
     try:
         fd = os.open(fname, os.O_RDWR | os.O_CREAT)
         os.close(fd)
@@ -256,15 +227,12 @@ def touch(fname):
         pass
 
 def day():
-    "return the day."
     return str(datetime.datetime.today()).split()[0]
 
 def days(path):
-    "return elapsed days since saving."
     return elapsed(time.time() - fntime(path))
 
 def elapsed(seconds, short=True):
-    "return number of seconds turned into a ymdhms string."
     txt = ""
     nsec = float(seconds)
     year = 365*24*60*60
@@ -308,7 +276,6 @@ def elapsed(seconds, short=True):
     return txt
 
 def get_time(daystr):
-    "return timestamp from string."
     for f in year_formats:
         try:
             t = time.mktime(time.strptime(daystr, f))
@@ -317,7 +284,6 @@ def get_time(daystr):
             pass
 
 def parse_time(daystr):
-    "parse ymdhms string into it's timestamped diff."
     if not any([c.isdigit() for c in daystr]):
         return 0
     valstr = ""
@@ -344,11 +310,9 @@ def parse_time(daystr):
     return total
 
 def today():
-    "return timestamp of this day (at start)."
     return datetime.datetime.today().timestamp()
 
 def to_day(daystring):
-    "parse human text into timestamp."
     line = ""
     daystr = str(daystring)
     for word in daystr.split():
@@ -364,7 +328,6 @@ def to_day(daystring):
         pass
 
 def parse(o, txt):
-    "parse text into a command."
     args = []
     o.origtxt = txt
     o.gets = Object()

@@ -1,4 +1,4 @@
-# ZBOT - 24/7 channel daemon.
+# ZBOT - 24/7 channel daemon
 #
 #
 
@@ -18,7 +18,7 @@ def cmd(event):
     event.reply(",".join(sorted(k.cmds)))
 
 def mds(event):
-    event.reply(",".join([m.__name__.split(".")[-1] for m in find_modules("madbot")]))
+    event.reply(",".join([m.__name__.split(".")[-1] for m in find_modules("zbot,mods")]))
 
 def tsk(event):
     psformat = "%-8s %-50s"
